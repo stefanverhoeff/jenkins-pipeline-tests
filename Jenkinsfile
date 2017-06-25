@@ -1,11 +1,5 @@
 #!/usr/bin/env groovy
 
-stage('SCM') {
-    node {
-        git 'https://github.com/stefanverhoeff/jenkins-pipeline-tests.git'
-    }
-}
-
 stage('build') {
     node {
       sh 'javac HelloWorld.java'
