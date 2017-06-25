@@ -1,13 +1,28 @@
 #!/usr/bin/env groovy
 
-stage 'build'
-
-node {
-  sh 'javac HelloWorld.java'
+stage('SCM') {
+    node {
+        git 'https://github.com/stefanverhoeff/jenkins-pipeline-tests.git'
+    }
 }
 
-stage 'run'
+stage('build') {
+    node {
+      sh 'javac HelloWorld.java'
+    }
+}
 
-node {
-  sh 'java HelloWorld'
+stage name: 'wait a while', concurrency: 1
+    node {
+        sh 'sleep 1'
+    }
+
+stage('run') {
+    parallel 'run': {
+        node {
+          sh 'java HelloWorld'
+        }
+    }, 'say something': {
+        echo 'something'
+    }
 }
